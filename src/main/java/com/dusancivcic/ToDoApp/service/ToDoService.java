@@ -49,11 +49,6 @@ public class ToDoService {
         toDoRepository.deleteById(id);
     }
 
-    public String loggedUserName() {
-        authentication = SecurityContextHolder.getContext().getAuthentication();
-        currentUser = (ToDoUser) authentication.getPrincipal();
-        String currentUserName = currentUser.getUserName();
-        return currentUserName;
-    }
+
 }
 

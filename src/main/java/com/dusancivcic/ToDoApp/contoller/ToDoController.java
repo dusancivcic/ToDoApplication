@@ -4,54 +4,44 @@ import com.dusancivcic.ToDoApp.model.ToDo;
 import com.dusancivcic.ToDoApp.model.ToDoRegisterUser;
 import com.dusancivcic.ToDoApp.service.ToDoRegisterUserService;
 import com.dusancivcic.ToDoApp.service.ToDoService;
+import com.dusancivcic.ToDoApp.service.ToDoUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import java.util.*;
 
-@Controller
+@RestController
 public class ToDoController {
     @Autowired
     private ToDoService toDoService;
-    @Autowired
-    private ToDoRegisterUserService toDoRegisterUserService;
 
     @PostMapping("/addToDo")
-    public String addToDo(@ModelAttribute ToDo toDo) {
+    public void addToDo(@ModelAttribute ToDo toDo) {
         toDoService.addToDo(toDo);
-        return "redirect:/homePage";
     }
 
     @RequestMapping(value = "/updateToDo", method = {RequestMethod.PUT, RequestMethod.GET})
-    public String updateToDo(ToDo toDo) {
+    public void updateToDo(ToDo toDo) {
         toDoService.updateToDo(toDo);
-        return "redirect:/homePage";
     }
 
-    @GetMapping("/homePage")
+    @GetMapping("/getList")
+    public List<ToDo> getToDoList(){
+        return toDoService.toDoList();
+    }
+   /* @GetMapping("/homePage")
     public String getHomePage(Model model) {
         model.addAttribute("todoList", toDoService.toDoList());
-        model.addAttribute("userName", toDoService.loggedUserName());
+        model.addAttribute("userName", toDoUserService.loggedUserName());
         return "homePage";
     }
 
+    */
+
     @RequestMapping(value = "/delete", method = {RequestMethod.DELETE, RequestMethod.GET})
-    public String deleteById(Long Id) {
+    public void deleteById(Long Id) {
         toDoService.deleteToDoById(Id);
-        return "redirect:/homePage";
-    }
-
-    @PostMapping("/registerUser")
-    public String saveUser(@ModelAttribute ToDoRegisterUser toDoRegisterUser) {
-        toDoRegisterUserService.registerUser(toDoRegisterUser);
-        return "loginPage";
-    }
-
-    @GetMapping("/register")
-    public String registerToDoUser(Model model) {
-        ToDoRegisterUser toDoRegisterUser = new ToDoRegisterUser();
-        model.addAttribute("user", toDoRegisterUser);
-        return "registerPage";
     }
 
     @RequestMapping("/getById")
